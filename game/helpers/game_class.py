@@ -3,7 +3,7 @@ from typing import Optional, Union
 
 from helpers.supporting_functions import check_for_win, get_player_move
 
-__all__ = ["Game", "Bot"]
+__all__ = ["Game"]
 
 
 class Game:
@@ -42,10 +42,23 @@ class Game:
         # Initialise the opponent
         self.opponent = Bot(2, self.board)
 
+        # Record if the game is finished
+        self.complete = False
+
     def place(self, player: int, i: int, j: int):
         """place a counter on square (i, j)"""
         self.board[i][j] = player
         self.moves += 1
+
+    def check_for_win(self):
+        """checks the board (a 3x3 array) to see whether there are 3 in a row the same
+
+        returns:
+        0: main_game not over
+        -1: main_game ended with a draw
+        1: Player 1 won
+        2: Player 2 won"""
+        return check_for_win(self.board)
 
     def visualise(self):
         """Display the board in a nice way"""
@@ -101,10 +114,11 @@ class Game:
             # Place the counter
             self.place(self.current_player, i, j)
             # Check if the board is in a 'win' state
-            win_state = check_for_win(self.board)
+            win_state = self.check_for_win()
 
             # If the game has ended display the results
             if win_state:
+                self.complete = True
                 self.visualise()
                 if win_state == -1:
                     print("Draw! No... not your weapons...")

@@ -1,4 +1,4 @@
-from .game_class import Bot, Game
-from .supporting_functions import check_for_win, get_player_move
+from .game_class import Game
+from .guis import TicTacToeWindow
 
-__all__ = ["check_for_win", "get_player_move", "Game", "Bot"]
+__all__ = ["Game", "TicTacToeWindow"]
