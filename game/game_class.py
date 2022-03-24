@@ -1,7 +1,7 @@
 from copy import deepcopy
 from typing import Optional, Union
 
-from helpers.supporting_functions import check_for_win, get_player_move
+from .helpers import check_for_win, get_player_move
 
 __all__ = ["Game"]
 

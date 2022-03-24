@@ -430,7 +430,9 @@ class TicTacToeWindowIn2D(tk.Tk):
         # check for win of main game
         if not self.win_game(game_r, game_c):
             # if player not won, then change the player number
-            self.main_game.current_player = (self.main_game.current_player) % 2 + 1
+            self.main_game.current_player = (
+                self.main_game.current_player
+            ) % 2 + 1
 
             # update the board
             if self.nextrow == -1:
@@ -509,7 +511,9 @@ class TicTacToeWindowIn2D(tk.Tk):
                 # update game to show complete
                 self.games[game_r][game_c].complete = True
                 # update the main game
-                self.main_game.board[game_r][game_c] = self.main_game.current_player
+                self.main_game.board[game_r][
+                    game_c
+                ] = self.main_game.current_player
                 if self.games[self.nextrow][self.nextcolumn].complete:
                     self.nextrow = -1
                     self.nextcolumn = -1
@@ -550,7 +554,9 @@ class TicTacToeWindowIn2D(tk.Tk):
                     game_r,
                     game_c,
                     "Player "
-                    + str(self.main_game.counters[self.main_game.current_player])
+                    + str(
+                        self.main_game.counters[self.main_game.current_player]
+                    )
                     + " won the game!",
                 )
             return True
