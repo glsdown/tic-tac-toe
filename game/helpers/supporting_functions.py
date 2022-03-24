@@ -1,3 +1,6 @@
+__all__ = ["check_for_win", "get_player_move"]
+
+
 def check_for_win(board):
     """checks the board (a 3x3 array) to see whether there are 3 in a row the same
 
@@ -50,15 +53,10 @@ def get_player_move(board, player=1):
     while True:
         try:
             i, j = (int(x) - 1 for x in input().split())
-            if (
-                board[i][j] == 0
-                and i in range(3)
-                and j in range(3)
-            ):
+            if board[i][j] == 0 and i in range(3) and j in range(3):
                 return i, j
             print(
-                "Invalid choice, please try again. Format: "
-                "'row column'\n"
+                "Invalid choice, please try again. Format: " "'row column'\n"
             )
         except Exception:
             print("Please try again. Format: 'row column'\n")

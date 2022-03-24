@@ -3,13 +3,14 @@ from typing import Optional, Union
 
 from helpers.supporting_functions import check_for_win, get_player_move
 
+__all__ = ["Game", "Bot"]
+
 
 class Game:
-
     def __init__(
         self,
         size: int = 3,
-        board: Optional[list[list[Union[str, int]]]] = None
+        board: Optional[list[list[Union[str, int]]]] = None,
     ):
         """create a new main_game object, consisting of an empty board
 
@@ -35,6 +36,12 @@ class Game:
         # Get the possible counters
         self.counters = [" ", "o", "x"]
 
+        # Start with player 1
+        self.current_player = 1
+
+        # Initialise the opponent
+        self.opponent = Bot(2, self.board)
+
     def place(self, player: int, i: int, j: int):
         """place a counter on square (i, j)"""
         self.board[i][j] = player
@@ -46,11 +53,8 @@ class Game:
         line = "   " + "---".join(["+"] * (self.size + 1))
         # Print out the column numbers at the top
         print(
-            "    " + " ".join(
-                [
-                    str(i).center(3) for i in range(1, self.size + 1)
-                ]
-            )
+            "    "
+            + " ".join([str(i).center(3) for i in range(1, self.size + 1)])
         )
         # Print a line forming the top row
         print(line)
@@ -78,10 +82,6 @@ class Game:
 
     def game_loop(self):
         """the main game loop"""
-        # Start with player 1
-        player = 1
-        # Initialise the opponent
-        opponent = Bot(2, self.board)
 
         # Display starting instructions
         print("You're playing tic-tac-toe!")
@@ -93,13 +93,13 @@ class Game:
             self.visualise()
 
             # Get the player's move
-            if player == 1:
-                i, j = get_player_move(self.board, player)
+            if self.current_player == 1:
+                i, j = get_player_move(self.board, self.current_player)
             else:
-                i, j = opponent.choose_move(self)
+                i, j = self.opponent.choose_move(self)
 
             # Place the counter
-            self.place(player, i, j)
+            self.place(self.current_player, i, j)
             # Check if the board is in a 'win' state
             win_state = check_for_win(self.board)
 
@@ -109,24 +109,23 @@ class Game:
                 if win_state == -1:
                     print("Draw! No... not your weapons...")
                 else:
-                    print("Player " + str(player) + " wins!")
+                    print("Player " + str(self.current_player) + " wins!")
                 break
 
             # Change the player
-            player = player % 2 + 1
+            self.current_player = self.current_player % 2 + 1
 
         # Display the end result
         print("Thanks for playing!")
 
 
 class Bot:
-
     def __init__(self, player: int, board: list[list[Union[str, int]]]):
         """Initialse the bot player
 
         board: a 'square' board grid of locations
         """
-        self.player = player
+        self.current_player = player
         self.board_size = len(board)
         self.board = deepcopy(board)
 
@@ -144,15 +143,17 @@ class Bot:
         counter on them
         """
         return [
-            (i, j) for i in range(self.board_size)
-            for j in range(self.board_size) if self.board[i][j] == 0
+            (i, j)
+            for i in range(self.board_size)
+            for j in range(self.board_size)
+            if self.board[i][j] == 0
         ]
 
     def alphabeta(
         self,
         max_player: bool = True,
         alpha: float = -float("inf"),
-        beta: float = float("inf")
+        beta: float = float("inf"),
     ) -> tuple[int, tuple]:
         """Recursive function to simulate all possible moves, and use
         alpha-beta pruning to choose the optimum one
@@ -172,7 +173,7 @@ class Bot:
         # Check if one of the players won
         if win_state in (1, 2):
             # If the bot won, then return a 'positive' result
-            if win_state == self.player:
+            if win_state == self.current_player:
                 return 1, None
             # If the bot didn't win, return a 'negative' result
             else:
@@ -184,12 +185,12 @@ class Bot:
         # If the player is the one that we are trying to make 'win'
         if max_player:
             # Playing as the bot
-            player = self.player
+            player = self.current_player
             # Here we want to maximise the score, so set the comparison low
             best_value = -float("inf")
         else:
             # Playing as the other player
-            player = (self.player % 2) + 1
+            player = (self.current_player % 2) + 1
             # Here we want to minimise the score, so set the comparison low
             best_value = float("inf")
 
@@ -245,9 +246,3 @@ class Bot:
         # Get the 'best' available move
         _, move = self.alphabeta()
         return move
-
-
-# Run the main game
-if __name__ == "__main__":
-    b = Game()
-    b.game_loop()
