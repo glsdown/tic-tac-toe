@@ -1,3 +1,4 @@
 .python-version
 *.zip
 .nox
+__pycache__
