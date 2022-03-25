@@ -16,4 +16,4 @@ This will give you the option to run any of the 3 versions included:
 
 1. Simple command line version with an unbeatable component
 2. A GUI game with an unbeatable component
-3. A 2D Tic-Tac-Toe GUI game which you can play with another person (or on your own - it's harder than it looks!)
+3. A 2D Tic-Tac-Toe GUI game which you can play with another person (or on your own - it's harder than it looks!) _A brief introduction to the game can be found [here](http://logicprogramming.stanford.edu/examples/nineboard/index.html)_
